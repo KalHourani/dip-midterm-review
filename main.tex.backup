@@ -1,0 +1,137 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{algpseudocode, algorithm}
+\usepackage{mathtools}
+\usepackage{enumerate}
+\usepackage{tabu}
+\usepackage{xcolor}
+\usepackage{tikz, tikz-qtree}
+\usepackage{graphviz}
+\usepackage{subfig}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\newenvironment{solution}{\begin{proof}[\textnormal{\textbf{Solution}}]}{\end{proof}}
+\newenvironment{exercise}[1]{\begin{proof}[\textnormal{\textbf{Exercise #1:}}]\phantom{\qedhere}}{\end{proof}}
+\newenvironment{lemma}{\begin{proof}[\textnormal{\textbf{Lemma}}]\phantom{\qedhere}}{\end{proof}}
+
+\renewcommand\thesubfigure{\arabic{subfigure}}
+
+\begin{document}
+\begin{titlepage}\pagenumbering{gobble}
+	\centering
+	{\scshape\LARGE University of Houston\par}
+	\vspace{1cm}
+	{\scshape\Large Midterm Review \par}
+	\vspace{1.5cm}
+	{\huge\bfseries COSC  4393\par}
+	{\huge\bfseries Digital Image Processing\par}
+	\vspace{0.5cm}
+	{\large\bfseries Praniv Mantini\par}
+	\vspace{2cm}
+	{\Large\itshape Khalid Hourani\par}
+	\vspace{0.5cm}
+	{\large \par} March 7, 2019
+	\vfill
+
+% Bottom of the page
+\end{titlepage}
+\vspace*{\fill}\begin{center}{\Huge This page intentionally left blank.}\end{center}\vspace*{\fill}\thispagestyle{empty}\clearpage
+\pagenumbering{arabic}
+
+For an $M\times N$ image $I$, the \textbf{Discrete Fourier Transform} at a pixel $u, v$ is given by 
+
+\begin{align*}
+ \tilde{I}(u, v)=\sum_{i=0}^{M-1}\sum_{j=0}^{N-1}I(i, j)e^{-2\pi\sqrt{-1}\left(\frac{ui}{M}+\frac{vj}{N}\right)}
+\end{align*}
+
+For a square image, we have $N=M$ and 
+
+\[ \tilde{I}(u, v)=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)e^{-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)}\]
+
+A complex-valued function $f$ is \textbf{Conjugate Symmetric} or \textbf{Hermitian} if $f^*(z)=f(-z)$. In the case of the DFT, we have 
+\begin{align*}
+ \tilde{I}(-u, -v)&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)e^{-\sqrt{-1}\frac{2\pi}{N}\left(-ui+-vj\right)}
+		\\&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\left(\cos{\left(-\frac{2\pi}{N}\left(-ui+-vj\right)\right)}+\sqrt{-1}\sin{\left(-\frac{2\pi}{N}\left(-ui+-vj\right)\right)}\right)
+		\\&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\left(\cos{\left(-\frac{2\pi}{N}\left(ui+vj\right)\right)}-\sqrt{-1}\sin{\left(-\frac{2\pi}{N}\left(-ui+-vj\right)\right)}\right)
+		\\&=\tilde{I}^*(u, v)
+\end{align*}
+
+Equivalently, a complex valued function is Conjugate Symmetric if and only if its real part is even and its odd part is odd. The real part of the DFT is just \[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\cos{\left(-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)\right)}\]
+
+For example, to compute the DFT of the following matrix: \[\begin{bmatrix}5&7\\8&3\end{bmatrix}\]
+
+We evaluate \begin{align*}
+	     \tilde{I}(0,0)&=\sum_{i=0}^1\sum_{j=0}^{1}I(i, j)e^{-\sqrt{-1}\frac{2\pi}{2}\left(0i + 0j\right)}
+			 \\&=\sum_{i=0}^1\sum_{j=0}^{1}I(i,j)
+			 \\&=I(0,0)+I(0,1)+I(1, 0)+I(1,1)
+			 \\&=5+7+8+3
+			 \\&=23
+	    \end{align*}
+	    
+	    \begin{align*}	     
+	    \tilde{I}(0,1)&=\sum_{i=0}^1\sum_{j=0}^1I(i, j)e^{-\sqrt{-1}\frac{2\pi}{2}\left(0i + j\right)}
+			\\&=\sum_{i=0}^1\sum_{j=0}^1I(i,j)e^{-\sqrt{-1}\pi j}
+			\\&=\sum_{i=0}^1\sum_{j=0}^1I(i,j)\left(\cos{\left(-\pi j\right)}+\sqrt{-1}\sin{\left(-\pi j\right)}\right)
+	    \end{align*}
+	    Plugging in the values of $i$ and $j$:
+	    \begin{align*}
+	    \tilde{I}(0,1)&=I(0,0)\left(\cos{\left(-\pi\cdot0\right)}+\sqrt{-1}\sin{\left(-\pi\cdot0\right)}\right)
+			\\&+I(0,1)\left(\cos{\left(-\pi\cdot1\right)}+\sqrt{-1}\sin{\left(-\pi\cdot1\right)}\right)
+			\\&+I(1,0)\left(\cos{\left(-\pi\cdot0\right)}+\sqrt{-1}\sin{\left(-\pi\cdot0\right)}\right)
+			\\&+I(1,1)\left(\cos{\left(-\pi\cdot1\right)}+\sqrt{-1}\sin{\left(-\pi\cdot1\right)}\right)
+			\\&=5\left(1+0i\right)+7\left(-1-0i\right)+8\left(1+0i\right)+3\left(-1-0i\right)
+			\\&=5-7+8-3
+			\\&=3
+	    \end{align*}
+	    
+	    	    \begin{align*}	     
+	    \tilde{I}(1,0)&=\sum_{i=0}^1\sum_{j=0}^1I(i, j)e^{-\sqrt{-1}\frac{2\pi}{2}\left(i + 0j\right)}
+			\\&=\sum_{i=0}^1\sum_{j=0}^1I(i,j)e^{-\sqrt{-1}\pi i}
+			\\&=\sum_{i=0}^1\sum_{j=0}^1I(i,j)\left(\cos{\left(-\pi i\right)}+\sqrt{-1}\sin{\left(-\pi i\right)}\right)
+	    \end{align*}
+	    Plugging in the values of $i$ and $j$:
+	    \begin{align*}
+	    \tilde{I}(1,0)&=I(0,0)\left(\cos{\left(-\pi\cdot0\right)}+\sqrt{-1}\sin{\left(-\pi\cdot0\right)}\right)
+			\\&+I(0,1)\left(\cos{\left(-\pi\cdot0\right)}+\sqrt{-1}\sin{\left(-\pi\cdot0\right)}\right)
+			\\&+I(1,0)\left(\cos{\left(-\pi\cdot1\right)}+\sqrt{-1}\sin{\left(-\pi\cdot1\right)}\right)
+			\\&+I(1,1)\left(\cos{\left(-\pi\cdot1\right)}+\sqrt{-1}\sin{\left(-\pi\cdot1\right)}\right)
+			\\&=5\left(1+0i\right)+7\left(1-0i\right)+8\left(-1+0i\right)+3\left(-1-0i\right)
+			\\&=5+7-8-3
+			\\&=1
+	    \end{align*}
+	   
+Finally:
+
+	    \begin{align*}	     
+	    \tilde{I}(1,1)&=\sum_{i=0}^1\sum_{j=0}^1I(i, j)e^{-\sqrt{-1}\frac{2\pi}{2}\left(i + j\right)}
+			\\&=\sum_{i=0}^1\sum_{j=0}^1I(i,j)e^{-\sqrt{-1}\pi (i+j)}
+			\\&=\sum_{i=0}^1\sum_{j=0}^1I(i,j)\left(\cos{\left(-\pi (i+j)\right)}+\sqrt{-1}\sin{\left(-\pi (i+j)\right)}\right)
+	    \end{align*}
+	    Plugging in the values of $i$ and $j$:
+	    \begin{align*}
+	    \tilde{I}(0,1)&=I(0,0)\left(\cos{\left(-\pi\cdot(0+0)\right)}+\sqrt{-1}\sin{\left(-\pi\cdot(0+0)\right)}\right)
+			\\&+I(0,1)\left(\cos{\left(-\pi\cdot(0+1)\right)}+\sqrt{-1}\sin{\left(-\pi\cdot(0+1)\right)}\right)
+			\\&+I(1,0)\left(\cos{\left(-\pi\cdot(1+0)\right)}+\sqrt{-1}\sin{\left(-\pi\cdot(1+0)\right)}\right)
+			\\&+I(1,1)\left(\cos{\left(-\pi\cdot(1+1)\right)}+\sqrt{-1}\sin{\left(-\pi\cdot(1+1)\right)}\right)
+			\\&=5\left(1+0i\right)+7\left(-1+0i\right)+8\left(-1+0i\right)+3\left(1+0i\right)
+			\\&=5-7-8+3
+			\\&=-7
+	    \end{align*}
+	     
+This gives the DFT Matrix \[\begin{bmatrix}21&3\\1&-7\end{bmatrix}\]
+
+\end{document}
