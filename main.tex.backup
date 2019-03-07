@@ -66,13 +66,32 @@ A complex-valued function $f$ is \textbf{Conjugate Symmetric} or \textbf{Hermiti
 \begin{align*}
  \tilde{I}(-u, -v)&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)e^{-\sqrt{-1}\frac{2\pi}{N}\left(-ui+-vj\right)}
 		\\&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\left(\cos{\left(-\frac{2\pi}{N}\left(-ui+-vj\right)\right)}+\sqrt{-1}\sin{\left(-\frac{2\pi}{N}\left(-ui+-vj\right)\right)}\right)
-		\\&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\left(\cos{\left(-\frac{2\pi}{N}\left(ui+vj\right)\right)}-\sqrt{-1}\sin{\left(-\frac{2\pi}{N}\left(-ui+-vj\right)\right)}\right)
+		\\&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\left(\cos{\left(-\frac{2\pi}{N}\left(ui+vj\right)\right)}-\sqrt{-1}\sin{\left(-\frac{2\pi}{N}\left(ui+vj\right)\right)}\right)
 		\\&=\tilde{I}^*(u, v)
 \end{align*}
 
-Equivalently, a complex valued function is Conjugate Symmetric if and only if its real part is even and its odd part is odd. The real part of the DFT is just \[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\cos{\left(-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)\right)}\]
+Equivalently, a complex valued function is Conjugate Symmetric if and only if its real part is even and its imaginary part is odd. The real part of the DFT is just \[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\cos{\left(-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)\right)}\] and the imaginary part is \[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\sin{\left(-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)\right)}\] which are clearly even and odd, respectively.
 
-For example, to compute the DFT of the following matrix: \[\begin{bmatrix}5&7\\8&3\end{bmatrix}\]
+The \textbf{magnitude} of a complex number $z=x+iy$ is given by $|z|=x^2+y^2$. To see that the magnitude of the DFT is symmetric, note that $|z|=|z*|$ for any complex number $z$. Since $\tilde{I}^*(u, v)=\tilde{-u, -v}$, \[\left|\tilde{I}^*(u, v)\right|=\left|\tilde{I}(-u, -v)\right|\]
+
+To see that the DFT is periodic, show that $\tilde{I}(u+kN,v+lN)=\tilde{I}(u,v)$. We write \[W_N^{ui+vj}=e^{-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)}\]
+
+\begin{align*}
+ \tilde{I}(u+kN, v+lN)&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)W_N^{(u+kN)i+(v+lN)j}
+		\\&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)W_N^{ui+vj+N(ki+lj)}
+		\\&=\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)W_N^{ui+vj}\cdot W_N^{N(ki+lj)}
+\end{align*}
+
+Then, we only need to show that $W_N^{N(ki+lj)}=1$. This is straightforward:
+
+\begin{align*}
+W_N^{N(ki+lj)}&=e^{-\sqrt{-1}\frac{2\pi}{N}\left(N(ki+lj\right)}
+	    \\&=e^{-\sqrt{-1}\cdot2\pi\left(ki+lj\right)}
+	    \\&=\cos\left(2\pi(ki+lj)\right)+\sqrt{-1}\sin\left(w\pi(ki+lj)\right)
+	    \\&=1
+\end{align*}
+
+To compute the DFT of the following matrix: \[\begin{bmatrix}5&7\\8&3\end{bmatrix}\]
 
 We evaluate \begin{align*}
 	     \tilde{I}(0,0)&=\sum_{i=0}^1\sum_{j=0}^{1}I(i, j)e^{-\sqrt{-1}\frac{2\pi}{2}\left(0i + 0j\right)}
@@ -133,5 +152,29 @@ Finally:
 	    \end{align*}
 	     
 This gives the DFT Matrix \[\begin{bmatrix}21&3\\1&-7\end{bmatrix}\]
+
+The \textbf{Inverse Discrete Fourier Transform} is given by 
+
+\[I(i, j)=\sum_{u=0}^{N-1}\sum_{v=0}^{N-1}\tilde{I}(u,v)e^{\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)}\]
+
+Its periodicity can be shown directly, as done earlier previously. 
+
+The \textbf{convolution} of two functions $f$ and $g$ is denoted $f*g$ or $f\otimes g$
+
+\[(f\otimes g)(n)=\sum_{m=-\infty}^{\infty}f(m)g(n-m)\]
+
+If $\mathcal{F}(f)$ denotes the Discrete Fourier Transformation of $F$, then 
+
+\[\mathcal{F}(f\otimes g)=\mathcal{F}(f)\times\mathcal{F}(g)\]
+
+since
+
+\begin{align*}
+\mathcal{F}(f\otimes g)(n)&=\mathcal{F}\left(\sum_{m=-\infty}^{\infty}f(m)g(n-m)\right)
+		     \\&=\sum_{t=-\infty}^{\infty}\left(\sum_{m=-\infty}^{\infty}f(m)g(n-m)\right)e^{-2\pi int}
+		     \\&=\sum_{m=-\infty}^{\infty}f(n)\left(\sum_{t=-\infty}^{\infty}g(n-m)e^{-2\pi int}\right)
+		     \\&=\sum_{m=-\infty}^{\infty}f(n)\left(\sum_{t=-\infty}^{\infty}g(n-m)e^{-2\pi it(n-m)}\right)e^{-2\pi imn}
+\end{align*}
+
 
 \end{document}
