@@ -72,7 +72,7 @@ A complex-valued function $f$ is \textbf{Conjugate Symmetric} or \textbf{Hermiti
 
 Equivalently, a complex valued function is Conjugate Symmetric if and only if its real part is even and its imaginary part is odd. The real part of the DFT is just \[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\cos{\left(-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)\right)}\] and the imaginary part is \[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}I(i, j)\sin{\left(-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)\right)}\] which are clearly even and odd, respectively.
 
-The \textbf{magnitude} of a complex number $z=x+iy$ is given by $|z|=x^2+y^2$. To see that the magnitude of the DFT is symmetric, note that $|z|=|z*|$ for any complex number $z$. Since $\tilde{I}^*(u, v)=\tilde{-u, -v}$, \[\left|\tilde{I}^*(u, v)\right|=\left|\tilde{I}(-u, -v)\right|\]
+The \textbf{magnitude} of a complex number $z=x+iy$ is given by $|z|=x^2+y^2$. To see that the magnitude of the DFT is symmetric, note that $|z|=|z^*|$ for any complex number $z$. Since $\tilde{I}^*(u, v)=\tilde{I}(-u, -v)$, \[\left|\tilde{I}(u, v)\right|=\left|\tilde{I}^*(u, v)\right|=\left|\tilde{I}(-u, -v)\right|\]
 
 To see that the DFT is periodic, show that $\tilde{I}(u+kN,v+lN)=\tilde{I}(u,v)$. We write \[W_N^{ui+vj}=e^{-\sqrt{-1}\frac{2\pi}{N}\left(ui+vj\right)}\]
 
